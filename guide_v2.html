@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Born2beRoot - Guía Completa de Estudio y Configuración</title>
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --card-bg: #ffffff;
+            --accent: #3d2469;
+            --text-main: #10043e;
+            --text-muted: #10052b;
+            --border: #30363d;
+            --code-bg: #f6f8fa;
+            --highlight: #416b54;
+            --inline-code: #478f98;
+            --h2-color: #43395f;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            line-height: 1.6;
+        }
+        nav {
+            width: 300px;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            background-color: var(--card-bg);
+            border-right: 1px solid var(--border);
+            padding: 20px 10px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+        nav h2 {
+            font-size: 1.1rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            padding-left: 10px;
+        }
+        nav a {
+            display: block;
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.88rem;
+            margin-bottom: 4px;
+            transition: 0.2s;
+            font-weight: 500;
+        }
+        nav a:hover {
+            background-color: #f0f0f0;
+            color: var(--accent);
+        }
+        main {
+            flex: 1;
+            padding: 40px;
+            max-width: 950px;
+        }
+        h1 {
+            color: var(--accent);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 10px;
+            margin-top: 0;
+            font-size: 2.2rem;
+        }
+        h2 {
+            color: var(--h2-color);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+            margin-top: 40px;
+            font-size: 1.5rem;
+        }
+        h3 {
+            color: var(--highlight);
+            margin-top: 25px;
+            font-size: 1.2rem;
+        }
+        code, pre {
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            background-color: var(--code-bg);
+            border-radius: 6px;
+        }
+        code {
+            padding: 2px 6px;
+            color: var(--inline-code);
+            font-weight: 600;
+        }
+        pre {
+            padding: 16px;
+            overflow-x: auto;
+            border: 1px solid var(--border);
+        }
+        pre code {
+            padding: 0;
+            color: var(--text-main);
+            font-weight: normal;
+        }
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .analogy {
+            background-color: #f4f9f5;
+            border-left: 4px solid var(--highlight);
+            padding: 12px 16px;
+            margin: 10px 0 20px 0;
+            border-radius: 0 6px 6px 0;
+            font-size: 0.95rem;
+        }
+        .note {
+            background-color: #f9f6fc;
+            border-left: 4px solid var(--accent);
+            padding: 12px 16px;
+            margin: 10px 0 20px 0;
+            border-radius: 0 6px 6px 0;
+            font-size: 0.95rem;
+        }
+        ul, ol {
+            padding-left: 22px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid var(--border);
+            padding: 10px 14px;
+            text-align: left;
+        }
+        th {
+            background-color: var(--code-bg);
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <h2>Born2beRoot</h2>
+    <a href="#intro">1. Introducción y Conceptos</a>
+    <a href="#creacion-vm">2. Creación de la VM</a>
+    <a href="#instalacion-so">3. Instalación de Debian</a>
+    <a href="#particionado">4. Particionado y LVM Cifrado</a>
+    <a href="#sudo-usuarios">5. Sudo y Gestión de Usuarios</a>
+    <a href="#ssh-ufw">6. Configuración de SSH y UFW</a>
+    <a href="#politica-pass">7. Política de Contraseñas (PAM)</a>
+    <a href="#script">8. Script monitoring.sh Explicado</a>
+    <a href="#cron">9. Automatización con Crontab</a>
+    <a href="#signature">10. Firma del Disco (signature.txt)</a>
+    <a href="#defensa">11. Guía de Evaluación y Defensa</a>
+</nav>
+
+<main>
+    <h1>Born2beRoot - Guía Completa de Estudio</h1>
+
+    <!-- 1. INTRODUCCIÓN Y CONCEPTOS -->
+    <section id="intro">
+        <h2>1. Introducción y Conceptos Básicos</h2>
+        <p>Esta sección resume los fundamentos teóricos necesarios para comprender qué se está configurando y por qué es obligatorio en el proyecto Born2beRoot.</p>
+
+        <div class="card">
+            <h3>ISO</h3>
+            <p><strong>Qué es:</strong> Archivo único que contiene una copia exacta y completa de un soporte óptico o sistema de archivos (estructura interna, metadatos y ficheros ocultos).</p>
+            <p><strong>Para qué sirve:</strong> Permite instalar sistemas operativos, realizar copias de seguridad de discos completos o distribuir software de forma fiable.</p>
+        </div>
+
+        <div class="card">
+            <h3>Máquina Virtual e Hipervisor</h3>
+            <p><strong>Qué es:</strong> Entorno aislado que emula un hardware independiente (CPU, RAM, disco) utilizando los recursos físicos del equipo anfitrión.</p>
+            <div class="analogy">💡 <strong>Analogía:</strong> La máquina física es un edificio y VirtualBox es un arquitecto que crea mini-apartamentos independientes (VMs) dentro del edificio.</div>
+        </div>
+
+        <div class="card">
+            <h3>LVM (Logical Volume Manager)</h3>
+            <p><strong>Qué is:</strong> Método flexible de gestión de almacenamiento en disco.</p>
+            <p><strong>Por qué se usa:</strong> A diferencia de las particiones fijas tradicionales, LVM permite redimensionar, ampliar o reducir volúmenes lógicos fácilmente en caliente, como si fuesen piezas desmontables.</p>
+        </div>
+
+        <div class="card">
+            <h3>Cifrado de Disco (LUKS)</h3>
+            <p><strong>Qué es:</strong> Encriptación de todos los datos del disco mediante clave. Si el disco duro físico es extraído o robado, la información resulta ilegible sin la contraseña de descifrado al arrancar.</p>
+        </div>
+
+        <div class="card">
+            <h3>SSH, OpenSSH y Port Forwarding</h3>
+            <p><strong>SSH:</strong> Protocolo de acceso remoto seguro a un servidor por línea de comandos mediante canal cifrado.</p>
+            <p><strong>Port Forwarding:</strong> Permite conectar el puerto local de la máquina anfitriona (ej. 4243) con el puerto del servidor virtualizado (4242), ya que la VM opera en una red privada aislada.</p>
+        </div>
+
+        <div class="card">
+            <h3>AppArmor vs SELinux</h3>
+            <p>Módulos de seguridad del Kernel (MAC) que limitan las acciones permitidas a cada programa aunque el usuario tenga permisos elevados.</p>
+            <ul>
+                <li><strong>AppArmor (Debian):</strong> Trabaja con perfiles basados en rutas absolutas de archivos (ej. Firefox solo accede a <code>/home/user/Downloads</code>).</li>
+                <li><strong>SELinux (Rocky Linux):</strong> Trabaja con etiquetas de seguridad asignadas a cada archivo, proceso y usuario mediante reglas estrictas de interacción.</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h3>PAM y Libpam-pwquality</h3>
+            <p><strong>PAM:</strong> Sistema modular en Linux para gestionar la autenticación (inicio de sesión, cambio de claves, etc.).</p>
+            <p><strong>Libpam-pwquality:</strong> Módulo de seguridad para PAM que comprueba y exige que las contraseñas cumplan requisitos estrictos de complejidad.</p>
+        </div>
+
+        <div class="card">
+            <h3>TTY y Scripting</h3>
+            <p><strong>TTY (TeleTYpewriter):</strong> Terminal de texto puro sin entorno gráfico (fondo negro y texto blanco).</p>
+            <p><strong>Script en Bash:</strong> Archivo ejecutable de texto que secuencia comandos automáticos de arriba a abajo.</p>
+        </div>
+    </section>
+
+    <!-- 2. CREACIÓN DE LA VM -->
+    <section id="creacion-vm">
+        <h2>2. Creación de la Máquina Virtual</h2>
+        <p>Pasos exactos en Oracle VirtualBox:</p>
+        <ol>
+            <li>Pulsar <strong>Nueva (New)</strong>.</li>
+            <li><strong>Name:</strong> <code>Born2beRoot</code></li>
+            <li><strong>Folder:</strong> Seleccionar <code>/sgoinfre</code> (directorio temporal para evitar saturar el espacio de usuario).</li>
+            <li><strong>ISO Image:</strong> Seleccionar la imagen descargada de Debian (ej. <code>debian-13.4.0-amd64-netinst.iso</code>).</li>
+            <li>Marcar la casilla <strong>Skip unattended installation</strong> y pulsar <em>Next</em>.</li>
+            <li><strong>Hardware:</strong> Asignar <code>1024 MB RAM</code> (1 GB) y <code>1 vCPU</code>. Pulsar <em>Next</em>.</li>
+            <li><strong>Virtual Hard disk:</strong> Crear un disco virtual de <code>20 GB</code>. Pulsar <em>Next</em> y finalizar con <em>Finish</em>.</li>
+        </ol>
+    </section>
+
+    <!-- 3. INSTALACIÓN DE DEBIAN -->
+    <section id="instalacion-so">
+        <h2>3. Instalación de Debian Paso a Paso</h2>
+        <ol>
+            <li>Iniciar la VM y seleccionar la opción <strong>Install</strong> (instalación en modo texto).</li>
+            <li>Seleccionar idioma, ubicación y distribución de teclado.</li>
+            <li><strong>Hostname:</strong> Indicar <code>valmoral42</code>.</li>
+            <li><strong>Domain name:</strong> Dejar en blanco y continuar.</li>
+            <li><strong>Contraseña de root:</strong> Configurar <code>Urduliz42.2026</code>.</li>
+            <li><strong>Usuario estándar:</strong> Crear usuario <code>valmoral</code> con contraseña <code>Urduliz42.2026</code>.</li>
+            <li>Seleccionar zona horaria (ej. Península).</li>
+            <li><strong>Selección de programas (Software selection):</strong> Desmarcar el entorno de escritorio gráfico y servidor web. Marcar **únicamente**:
+                <ul>
+                    <li><code>SSH server</code></li>
+                    <li><code>standard system utilities</code></li>
+                </ul>
+            </li>
+        </ol>
+    </section>
+
+    <!-- 4. PARTICIONADO -->
+    <section id="particionado">
+        <h2>4. Particionado de Disco y LVM Cifrado</h2>
+        <ol>
+            <li>En el menú de particionado, elegir: <strong>Guiado - utilizar todo el disco y configurar LVM cifrado</strong>.</li>
+            <li>Elegir el disco predeterminado de 20 GB.</li>
+            <li>Seleccionar el esquema: <strong>Separar la partición /home</strong>.</li>
+            <li>Aceptar guardar los cambios en el disco cuando lo solicite.</li>
+            <li>Introducir la contraseña de cifrado de disco dos veces: <code>Urduliz42.2026</code>.</li>
+            <li>Indicar el tamaño del volumen asignado (por defecto tomar el máximo disponible, aprox. 20.5 GB).</li>
+            <li>Finalizar el particionado y escribir los cambios en el disco seleccionando <strong>Sí</strong>.</li>
+            <li><strong>Instalación de GRUB:</strong> Seleccionar <strong>Sí</strong> e instalar el cargador en la unidad principal <code>/dev/sda</code>.</li>
+        </ol>
+    </section>
+
+    <!-- 5. SUDO Y USUARIOS -->
+    <section id="sudo-usuarios">
+        <h2>5. Sudo y Gestión de Usuarios</h2>
+        <p>Acceder como root (<code>su -</code>) e instalar sudo:</p>
+        <pre><code>apt update && apt install sudo -y</code></pre>
+
+        <p>Añadir el usuario a los grupos obligatorios:</p>
+        <pre><code>addgroup user42
+adduser valmoral user42
+adduser valmoral sudo</code></pre>
+        <p>Para comprobar que pertenece a los grupos correctamente: <code>getent group user42</code> y <code>getent group sudo</code>.</p>
+
+        <h3>Configuración estricta de Sudo</h3>
+        <p>Crear el fichero de configuración de sudo:</p>
+        <pre><code>touch /etc/sudoers.d/sudo-config
+mkdir -p /var/log/sudo
+nano /etc/sudoers.d/sudo-config</code></pre>
+
+        <p>Añadir las siguientes directivas obligatorias:</p>
+        <pre><code>Defaults passwd_tries=3
+Defaults badpass_message="Invalid password, try again"
+Defaults logfile="/var/log/sudo/sudo_config"
+Defaults log_input, log_output
+Defaults iolog_dir="/var/log/sudo"
+Defaults requiretty
+Defaults secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"</code></pre>
+    </section>
+
+    <!-- 6. SSH Y UFW -->
+    <section id="ssh-ufw">
+        <h2>6. Configuración de SSH y Cortafuegos UFW</h2>
+
+        <h3>Configurar SSH</h3>
+        <p>Editar el fichero de configuración del servidor SSH:</p>
+        <pre><code>nano /etc/ssh/sshd_config</code></pre>
+        <ul>
+            <li>Descomentar y modificar el puerto: <code>Port 4242</code></li>
+            <li>Descomentar y denegar acceso root: <code>PermitRootLogin no</code></li>
+        </ul>
+        <p>Editar también el cliente SSH en <code>/etc/ssh/ssh_config</code> descomentando <code>Port 4242</code>.</p>
+        <p>Reiniciar el servicio SSH: <code>sudo service ssh restart</code> y verificar estado con <code>sudo service ssh status</code>.</p>
+
+        <h3>Configurar Cortafuegos (UFW)</h3>
+        <pre><code>sudo apt install ufw -y
+sudo ufw enable
+sudo ufw allow 4242
+sudo ufw status numbered</code></pre>
+
+        <h3>Port Forwarding en VirtualBox</h3>
+        <p>Con la VM apagada o desde Ajustes:</p>
+        <ol>
+            <li>Ir a <strong>Red -> Avanzado -> Reenvío de puertos (Port Forwarding)</strong>.</li>
+            <li>Añadir regla:
+                <ul>
+                    <li><strong>Host Port:</strong> <code>4243</code> (o puerto libre en el anfitrión)</li>
+                    <li><strong>Guest Port:</strong> <code>4242</code></li>
+                </ul>
+            </li>
+        </ol>
+        <p>Probar conexión desde la terminal del ordenador anfitrión:</p>
+        <pre><code>ssh valmoral@localhost -p 4243</code></pre>
+    </section>
+
+    <!-- 7. POLITICA DE CONTRASEÑAS -->
+    <section id="politica-pass">
+        <h2>7. Política de Contraseñas Fuertes (PAM)</h2>
+
+        <h3>Configuración de Caducidad (`/etc/login.defs`)</h3>
+        <pre><code>nano /etc/login.defs</code></pre>
+        <p>Modificar los parámetros existentes:</p>
+        <pre><code>PASS_MAX_DAYS   30
+PASS_MIN_DAYS   2
+PASS_WARN_AGE   7</code></pre>
+
+        <h3>Configuración de Complejidad con PAM</h3>
+        <pre><code>sudo apt install libpam-pwquality -y
+sudo nano /etc/pam.d/common-password</code></pre>
+        <p>Añadir a la línea que contiene <code>pam_pwquality.so</code> las siguientes reglas:</p>
+        <pre><code>minlen=10 ucredit=-1 lcredit=-1 dcredit=-1 maxrepeat=3 reject_username difok=7</code></pre>
+
+        <div class="note">
+            📌 <strong>Explicación de parámetros:</strong>
+            <ul>
+                <li><code>minlen=10</code>: Mínimo 10 caracteres.</li>
+                <li><code>ucredit=-1</code>: Mínimo 1 mayúscula.</li>
+                <li><code>lcredit=-1</code>: Mínimo 1 minúscula.</li>
+                <li><code>dcredit=-1</code>: Mínimo 1 dígito.</li>
+                <li><code>maxrepeat=3</code>: Máximo 3 caracteres idénticos consecutivos.</li>
+                <li><code>reject_username</code>: No puede contener el nombre del usuario.</li>
+                <li><code>difok=7</code>: Mínimo 7 caracteres distintos a la clave anterior.</li>
+            </ul>
+        </div>
+
+        <p>Aplicar la nueva caducidad a los usuarios ya creados:</p>
+        <pre><code>sudo chage -m 2 -M 30 valmoral
+sudo chage -m 2 -M 30 root
+sudo chage -l valmoral</code></pre>
+    </section>
+
+    <!-- 8. SCRIPT MONITORING.SH -->
+    <section id="script">
+        <h2>8. Script <code>monitoring.sh</code> Explicado Comando a Comando</h2>
+        <p>Crear el fichero ejecutable en <code>/home/valmoral/monitoring.sh</code>:</p>
+
+        <pre><code>#!/bin/bash
+
+# Arquitectura y versión del Kernel
+arch=$(uname -a)
+
+# Número de procesadores físicos
+pcpu=$(grep "physical id" /proc/cpuinfo | sort -u | wc -l)
+
+# Número de procesadores virtuales (vCPU)
+vcpu=$(grep "^processor" /proc/cpuinfo | wc -l)
+
+# Memoria RAM (Total, Usada y Porcentaje)
+fram=$(free -m | awk '$1 == "Mem:" {print $2}')
+uram=$(free -m | awk '$1 == "Mem:" {print $3}')
+pram=$(free -m | awk '$1 == "Mem:" {printf("%.2f"), $3/$2*100}')
+
+# Memoria de Disco (Storage)
+fdisk=$(df -m | grep "/dev/" | grep -v "/boot" | awk '{f += $2} END {print f}')
+udisk=$(df -m | grep "/dev/" | grep -v "/boot" | awk '{u += $3} END {print u}')
+pdisk=$(df -m | grep "/dev/" | grep -v "/boot" | awk '{u += $3; f += $2} END {printf("%d"), u/f*100}')
+
+# Carga de la CPU (%)
+cpul=$(vmstat 1 2 | tail -1 | awk '{printf("%.1f"), 100 - $15}')
+
+# Fecha y hora del último reinicio
+lb=$(who -b | awk '{print $3" "$4}')
+
+# Uso de LVM activo o no
+lvmu=$(if [$(lsblk | grep "lvm" | wc -l) -gt 0 ]; then echo yes; else echo no; fi)
+
+# Conexiones TCP activas ESTABLISHED
+tcpc=$(ss -ta | grep ESTAB | wc -l)
+
+# Número de usuarios logueados
+ulog=$(users | wc -w)
+
+# Dirección IPv4 y MAC
+ip=$(hostname -I)
+mac=$(ip link | grep "link/ether" | awk '{print $2}')
+
+# Número de comandos ejecutados con sudo
+cmnd=$(journalctl _COMM=sudo | grep COMMAND | wc -l)
+
+# Imprimir información en todos los terminales
+wall "  #Architecture: $arch
+        #Physical CPU: $pcpu
+        #vCPU: $vcpu
+        #Memory Usage: $uram/${fram}MB ($pram%)
+        #Disk Usage: $udisk/${fdisk}Mb ($pdisk%)
+        #CPU load: $cpul%
+        #Last boot: $lb
+        #LVM use: $lvmu
+        #Connections TCP: $tcpc ESTABLISHED
+        #User log: $ulog
+        #Network: IP $ip ($mac)
+        #Sudo: $cmnd cmd"</code></pre>
+
+        <p>Asignar permisos de ejecución:</p>
+        <pre><code>chmod +x /home/valmoral/monitoring.sh</code></pre>
+    </section>
+
+    <!-- 9. CRONTAB -->
+    <section id="cron">
+        <h2>9. Automatización con Crontab</h2>
+        <p>Cron es un administrador de tareas en segundo plano. Para ejecutar el script cada 10 minutos desde la cuenta root:</p>
+        <pre><code>sudo crontab -u root -e</code></pre>
+        <p>Seleccionar el editor <code>/bin/nano</code> y añadir al final del fichero:</p>
+        <pre><code>*/10 * * * * /home/valmoral/monitoring.sh</code></pre>
+    </section>
+
+    <!-- 10. SIGNATURE.TXT -->
+    <section id="signature">
+        <h2>10. Generación de la Huella Digital (signature.txt)</h2>
+        <p>Obtener el hash SHA1 del disco virtual <code>.vdi</code> desde la terminal de la máquina anfitriona (host):</p>
+
+        <table>
+            <tr>
+                <th>Sistema Anfitrión</th>
+                <th>Comando a Ejecutar</th>
+            </tr>
+            <tr>
+                <td><strong>Linux / macOS</strong></td>
+                <td><code>shasum Born2beRoot.vdi > signature.txt</code></td>
+            </tr>
+            <tr>
+                <td><strong>Windows (PowerShell)</strong></td>
+                <td><code>certUtil -hashfile Born2beRoot.vdi SHA1 > signature.txt</code></td>
+            </tr>
+        </table>
+        <p>El archivo <code>signature.txt</code> es el único entregable en el repositorio de Git junto con el <code>README.md</code>.</p>
+    </section>
+
+    <!-- 11. GUIA DE DEFENSA -->
+    <section id="defensa">
+        <h2>11. Guía de Evaluación y Preguntas de Defensa</h2>
+        <div class="card">
+            <h3>Preguntas Teóricas Habituales</h3>
+            <ul>
+                <li><strong>¿Por qué elegiste Debian sobre Rocky Linux?</strong> Debian utiliza paquetes <code>.deb</code> con la herramienta <code>apt</code>, es sumamente estable y óptimo para servidores pequeños sin componentes innecesarios.</li>
+                <li><strong>Diferencia entre apt y aptitude:</strong> <code>apt</code> es la herramienta estándar de línea de comandos. <code>aptitude</code> incluye una interfaz basada en texto (TUI) y resuelve dependencias complejas de forma más avanzada.</li>
+                <li><strong>¿Qué es LVM y qué ventajas ofrece?</strong> Permite gestionar el almacenamiento como volúmenes lógicos dinámicos, facilitando redimensionar particiones sin formatear el disco.</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h3>Prácticas que te pedirán en directo durante la evaluación</h3>
+            <ol>
+                <li><strong>Cambiar el Hostname:</strong>
+                    <pre><code>sudo hostnamectl set-hostname nuevoLogin42</code></pre>
+                    Editar también <code>/etc/hosts</code> sustituyendo el antiguo hostname por el nuevo.
+                </li>
+                <li><strong>Crear un usuario nuevo y meterlo en el grupo user42:</strong>
+                    <pre><code>sudo adduser nuevoUsuario
+sudo addgroup user42
+sudo adduser nuevoUsuario user42
+getent group user42</code></pre>
+                </li>
+                <li><strong>Comprobar la política de contraseñas:</strong> Crear un usuario con clave débil para demostrar que el sistema la rechaza.</li>
+                <li><strong>Verificar UFW y SSH:</strong> Mostrar las reglas activas con <code>sudo ufw status</code> y conectar por SSH desde el equipo anfitrión.</li>
+                <li><strong>Detener la ejecución del script temporalmente:</strong>
+                    Editar el crontab (<code>sudo crontab -e</code>) y comentar la línea poniendo un <code>#</code> al inicio.
+                </li>
+            </ol>
+        </div>
+    </section>
+</main>
+
+</body>
+</html>
